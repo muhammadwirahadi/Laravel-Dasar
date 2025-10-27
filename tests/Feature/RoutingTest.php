@@ -90,6 +90,10 @@ class RoutingTest extends TestCase
         $this->get('/conflict/wira')
             ->assertSeeText("Conflict Muhammad Wira Hadi");
         
-        
+    }
+
+    // test
+    public function testttt(){
+        'hai';
     }
 }
