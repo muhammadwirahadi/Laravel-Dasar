@@ -1,0 +1,4 @@
+/* untuk node.js | jika di jalankan (npm run prod) akan di compaile ke file punlic*/
+.test {
+    font-family: monospace;
+}
