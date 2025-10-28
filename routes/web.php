@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HelloController;
+use App\Http\Controllers\InputController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,16 +51,16 @@ Route::get('/hallo-world', function () {
 // Route Parameter
 Route::get('/products/{id}', function ($productId) {
     return "Product $productId";
-});
+})->name('product.detail');//---> menamakan route
 
 Route::get('/products/{product}/items/{item}', function ($productId, $itemId) {
     return "Product $productId, Item $itemId";
-});
+})->name('product.item.detail');//---> menamakan route
 
 // Route Paramater Regex
 Route::get('/catagories/{id}', function ($catagoryId) {
     return "Catagory $catagoryId";
-})->where('id', '[0-9]+');
+})->where('id', '[0-9]+')->name('catagory.detail');
 
 // Route::get('/catagories/{id}', function ($catagoryId) {
 //     return "Catagory $catagoryId";
@@ -68,7 +70,7 @@ Route::get('/catagories/{id}', function ($catagoryId) {
 // Route Parameter Optional (?)
 Route::get('/users/{id?}', function ($userId = '404'){ //--> harus di kasih default (404 atau any)
     return "User $userId";
-});
+})->name('user.detail');
 
 // ---------------------------------------------------------------------------------------------
 
@@ -88,5 +90,51 @@ Route::get('/conflict/{name}', function ($name) {
 // });
 
 // ---------------------------------------------------------------------------------------------
+// contoh menggunakan ketika sudah menamakan route
+Route::get('/produk/{id}', function ($id) {
+    $link = route('product.detail', ['id' => $id]);
+    return "Link $link";
+});
+
+Route::get('/produk-redirect/{id}', function ($id) {
+    return redirect()->route('product.detail', ['id' => $id]);
+});
+
+// ---------------------------------------------------------------------------------------------
+// Request
+Route::get('/controller/hello/request', [HelloController::class, 'request']);
+
+// Controller
+Route::get('/controller/hello/{name}', [HelloController::class, 'hello']);
+
+
+// Request Input
+// get
+Route::get('/input/hello', [InputController::class, 'hello']); 
+// post
+Route::post('/input/hello', [InputController::class, 'hello']);
+
+// Request Nested Input
+Route::post('/input/hello/first', [InputController::class, 'helloFirstName']);
+
+// Mengambil Semua Input
+Route::post('/input/hello/input', [InputController::class, 'helloInput']);
+
+// Mengambil Array Input
+Route::post('/input/hello/array', [InputController::class, 'helloArray']);
+
+// ---------------------------------------------------------------------------------------------
+// Input Type
+Route::post('/input/type', [InputController::class, 'inputType']);
+
+// Filter Request Input
+// only
+Route::post('/input/filter/only', [InputController::class, 'filterOnly']);
+
+// except
+Route::post('/input/filter/except', [InputController::class, 'filterExcept']);
+
+// Marge Input
+Route::post('/input/filter/merge', [InputController::class, 'filterMerge']);
 
 
