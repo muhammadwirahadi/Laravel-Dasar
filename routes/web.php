@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\CookieController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
+use App\Http\Controllers\ResponseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -137,4 +140,24 @@ Route::post('/input/filter/except', [InputController::class, 'filterExcept']);
 // Marge Input
 Route::post('/input/filter/merge', [InputController::class, 'filterMerge']);
 
+// ---------------------------------------------------------------------------------------------
+// File Upload
+Route::post('/file/upload', [FileController::class, 'upload']);
 
+// Response
+Route::get('/response/hello', [ResponseController::class, 'response']);
+
+// HTTP Response Header
+Route::get('/response/header', [ResponseController::class, 'header']);
+
+// Reponses view, json, file, download
+Route::get('/response/type/view', [ResponseController::class, 'responseView']);
+
+Route::get('/response/type/json', [ResponseController::class, 'responseJson']);
+
+Route::get('/response/type/file', [ResponseController::class, 'responseFile']);
+
+Route::get('/response/type/download', [ResponseController::class, 'responseDownload']);
+
+// Cookie
+Route::get('/cookie/set', [CookieController::class, 'createCookie']);
