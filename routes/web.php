@@ -4,7 +4,9 @@ use App\Http\Controllers\CookieController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
+use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,11 +56,11 @@ Route::get('/hallo-world', function () {
 // Route Parameter
 Route::get('/products/{id}', function ($productId) {
     return "Product $productId";
-})->name('product.detail');//---> menamakan route
+})->name('product.detail'); //---> menamakan route
 
 Route::get('/products/{product}/items/{item}', function ($productId, $itemId) {
     return "Product $productId, Item $itemId";
-})->name('product.item.detail');//---> menamakan route
+})->name('product.item.detail'); //---> menamakan route
 
 // Route Paramater Regex
 Route::get('/catagories/{id}', function ($catagoryId) {
@@ -71,7 +73,7 @@ Route::get('/catagories/{id}', function ($catagoryId) {
 
 
 // Route Parameter Optional (?)
-Route::get('/users/{id?}', function ($userId = '404'){ //--> harus di kasih default (404 atau any)
+Route::get('/users/{id?}', function ($userId = '404') { //--> harus di kasih default (404 atau any)
     return "User $userId";
 })->name('user.detail');
 
@@ -113,7 +115,7 @@ Route::get('/controller/hello/{name}', [HelloController::class, 'hello']);
 
 // Request Input
 // get
-Route::get('/input/hello', [InputController::class, 'hello']); 
+Route::get('/input/hello', [InputController::class, 'hello']);
 // post
 Route::post('/input/hello', [InputController::class, 'hello']);
 
@@ -142,7 +144,8 @@ Route::post('/input/filter/merge', [InputController::class, 'filterMerge']);
 
 // ---------------------------------------------------------------------------------------------
 // File Upload
-Route::post('/file/upload', [FileController::class, 'upload']);
+Route::post('/file/upload', [FileController::class, 'upload'])
+    ->withoutMiddleware([VerifyCsrfToken::class]);
 
 // Response
 Route::get('/response/hello', [ResponseController::class, 'response']);
@@ -161,3 +164,36 @@ Route::get('/response/type/download', [ResponseController::class, 'responseDownl
 
 // Cookie
 Route::get('/cookie/set', [CookieController::class, 'createCookie']);
+
+// Get Cookie
+Route::get('/cookie/get', [CookieController::class, 'getCookie']);
+
+// Clear Cookie
+Route::get('/cookie/clear', [CookieController::class, 'clearCookie']);
+
+// ---------------------------------------------------------------------------------------------
+// Redirect
+Route::get('/redirect/from', [RedirectController::class, 'redirectFrom']);
+Route::get('/redirect/to', [RedirectController::class, 'redirectTo']);
+
+// Redirect Named routes
+Route::get('/redirect/name', [RedirectController::class, 'redirectName']);
+Route::get('/redirect/name/{name}', [RedirectController::class, 'redirectHello'])
+    ->name('redirect-hello');
+Route::get('/redirect/action', [RedirectController::class, 'redirectAction']);
+
+// Redirect to External Domain
+Route::get('/redirect/bayek', [RedirectController::class, 'redirectAway']);
+
+// ---------------------------------------------------------------------------------------------
+// Middleware
+Route::get('/middleware/api', function () {
+    return "OK";
+})->middleware(['contoh:mwh, 401']);
+
+// Middleware Group
+Route::get('/middleware/group', function () {
+    return "GROUP";
+})->middleware(['mwh']);
+
+// Exclude Middleware

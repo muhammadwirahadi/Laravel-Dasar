@@ -15,4 +15,17 @@ class CookieControllerTest extends TestCase
             ->assertCookie('User-Id', 'Wira')
             ->assertCookie('Is-Member', 'true');
     }
+    
+    public function testGetCookie()
+    {
+        $this->withCookie('User-Id', 'Wira')
+            ->withCookie('Is-Member', 'true')
+            ->get('/cookie/get')
+            ->assertJson([
+                'userId' => 'Wira',
+                'isMember' => 'true'
+            ]);
+    }
+
+
 }
